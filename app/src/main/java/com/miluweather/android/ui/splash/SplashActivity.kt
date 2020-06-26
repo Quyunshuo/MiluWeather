@@ -17,11 +17,13 @@ class SplashActivity : BaseActivity() {
     override fun getLayoutId(): Int = R.layout.activity_splash
 
     override fun initView() {
-        mMainScope.launch(Dispatchers.Default) {
-            delay(1000)
+        mMainScope.launch(Dispatchers.IO) {
+            delay(800)
             startActivity(Intent(this@SplashActivity, WeatherActivity::class.java))
             delay(100)
             finish()
         }
     }
+
+    override fun onBackPressed() {}
 }
