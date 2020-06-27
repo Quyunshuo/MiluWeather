@@ -1,7 +1,9 @@
 package com.miluweather.android.base
 
 import android.os.Bundle
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import com.jaeger.library.StatusBarUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
@@ -24,6 +26,14 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun getLayoutId(): Int
 
     abstract fun initView()
+
+    /**
+     * 设置状态栏的颜色
+     *@param color 色值
+     */
+    fun setStatusBarColor(@ColorInt color: Int, statusBarAlpha: Int = 0) {
+        StatusBarUtil.setColor(this, color, statusBarAlpha)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

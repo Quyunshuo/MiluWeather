@@ -1,4 +1,4 @@
-package com.miluweather.android.ui
+package com.miluweather.android.ui.main
 
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity

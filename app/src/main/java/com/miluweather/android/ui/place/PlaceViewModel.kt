@@ -21,8 +21,8 @@ class PlaceViewModel : ViewModel() {
 
     // 当搜索值发生变化也就是调用searchPlaces()方法时
     // 会触发Transformations.switchMap()的逻辑进行网络请求 返回一个可观察的对象
-    val placeLivaData = Transformations.switchMap(searchLivaData) { query ->
-        Repository.searchPlaces(query)
+    val placeLivaData = Transformations.switchMap(searchLivaData) {
+        Repository.searchPlaces(it)
     }
 
     /**

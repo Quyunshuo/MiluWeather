@@ -73,4 +73,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
     implementation 'com.tencent:mmkv:1.1.1'
     implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }

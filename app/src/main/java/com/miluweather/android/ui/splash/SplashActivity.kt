@@ -3,8 +3,7 @@ package com.miluweather.android.ui.splash
 import android.content.Intent
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
-import com.miluweather.android.ui.MainActivity
-import com.miluweather.android.ui.weather.WeatherActivity
+import com.miluweather.android.ui.main.MainActivity
 import kotlinx.coroutines.*
 
 /**
