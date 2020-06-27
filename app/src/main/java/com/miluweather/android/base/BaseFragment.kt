@@ -1,5 +1,6 @@
 package com.miluweather.android.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,14 @@ import kotlinx.coroutines.cancel
  */
 abstract class BaseFragment : Fragment() {
 
-    val mMainScope by lazy { MainScope() }
+    protected val mMainScope by lazy { MainScope() }
+
+    protected lateinit var mContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,8 +34,8 @@ abstract class BaseFragment : Fragment() {
         return inflater.inflate(getLayoutId(), null)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initView()
     }
 

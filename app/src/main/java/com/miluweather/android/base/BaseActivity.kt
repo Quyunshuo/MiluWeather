@@ -13,7 +13,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    val mMainScope by lazy { MainScope() }
+    protected val mMainScope by lazy { MainScope() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

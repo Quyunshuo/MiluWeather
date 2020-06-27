@@ -3,6 +3,7 @@ package com.miluweather.android.ui.splash
 import android.content.Intent
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
+import com.miluweather.android.ui.MainActivity
 import com.miluweather.android.ui.weather.WeatherActivity
 import kotlinx.coroutines.*
 
@@ -19,7 +20,7 @@ class SplashActivity : BaseActivity() {
     override fun initView() {
         mMainScope.launch(Dispatchers.IO) {
             delay(800)
-            startActivity(Intent(this@SplashActivity, WeatherActivity::class.java))
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             delay(100)
             finish()
         }
