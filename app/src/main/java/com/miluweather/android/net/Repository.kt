@@ -67,9 +67,12 @@ object Repository {
 
     /**
      * 对请求处理封装
+     * 设置liveData开启的协程在页面销毁后立即进行销毁
+     * 这个LiveData确实比较特殊，它是经过了switchMap之后转换了一次，和界面上观察的LiveData理论上确实不是同一个
+     * 但switchMap底层貌似是有做处理的，来关联这两个LiveData
      */
     private fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
-        liveData<Result<T>> {
+        liveData<Result<T>>(timeoutInMs = 0L) {
             val result = try {
                 block()
             } catch (e: Exception) {
