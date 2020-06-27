@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.miluweather.android.model.Location
-import com.miluweather.android.net.Repository
 
 /**
  * @Author: QuYunShuo
@@ -13,6 +12,8 @@ import com.miluweather.android.net.Repository
  * @Remark:
  */
 class WeatherViewModel : ViewModel() {
+
+    private val mRepository by lazy { WeatherRepository() }
 
     private val locationLiveData = MutableLiveData<Location>()
 
@@ -23,7 +24,7 @@ class WeatherViewModel : ViewModel() {
     var placeName = ""
 
     val weatherLiveData = Transformations.switchMap(locationLiveData) {
-        Repository.refreshWeather(it.lng, it.lat)
+        mRepository.refreshWeather(it.lng, it.lat)
     }
 
     fun refreshWeather(lng: String, lat: String) {
