@@ -1,6 +1,7 @@
 package com.miluweather.android.ui.place
 
 import com.miluweather.android.base.BaseRepository
+import com.miluweather.android.dao.PlaceDao
 import com.miluweather.android.model.Place
 import com.miluweather.android.net.SendRequest
 import kotlinx.coroutines.Dispatchers
@@ -24,4 +25,19 @@ class PlaceRepository : BaseRepository() {
             if (placeResponse.status == "ok") Result.success(placeResponse.places)
             else Result.failure<List<Place>>(RuntimeException("response status is ${placeResponse.status}"))
         }
+
+    /**
+     * 保存当前选中的城市
+     */
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    /**
+     * 获取保存的当前选中的城市
+     */
+    fun getSavePlace(): Place = PlaceDao.getSavePlace()
+
+    /**
+     * 判断是否有保存的选中城市
+     */
+    fun isPlaceSave() = PlaceDao.isPlaceSave()
 }

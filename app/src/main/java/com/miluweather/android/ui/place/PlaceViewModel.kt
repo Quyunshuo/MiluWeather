@@ -32,4 +32,19 @@ class PlaceViewModel : ViewModel() {
     fun searchPlaces(query: String) {
         searchLivaData.value = query
     }
+
+    /**
+     * 保存当前选中的城市
+     */
+    fun savePlace(place: Place) = mRepository.savePlace(place)
+
+    /**
+     * 获取保存的当前选中的城市
+     */
+    fun getSavePlace(): Place = mRepository.getSavePlace()
+
+    /**
+     * 判断是否有保存的选中城市
+     */
+    fun isPlaceSave() = mRepository.isPlaceSave()
 }

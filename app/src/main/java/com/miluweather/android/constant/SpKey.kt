@@ -7,4 +7,7 @@ package com.miluweather.android.constant
  * @Remark: Sp的key
  */
 object SpKey {
+
+    // 已选中的城市
+    const val SELECTED_PLACE = "selected_place"
 }

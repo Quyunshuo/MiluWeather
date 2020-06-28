@@ -31,9 +31,12 @@ class PlaceFragment : BaseFragment() {
 
     override fun initView() {
         (activity as MainActivity).setStatusBarColor(resources.getColor(R.color.theme_color))
+        isSelectedPlace()
         mAdapter = PlaceAdapter(mViewModel.placeList)
         mAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.getItem(position) as Place
+            // 对当前城市信息做保存
+            mViewModel.savePlace(data)
             val intent = Intent(mContext, WeatherActivity::class.java).apply {
                 putExtra("location_lng", data.location.lng)
                 putExtra("location_lat", data.location.lat)
@@ -72,5 +75,23 @@ class PlaceFragment : BaseFragment() {
                 it.exceptionOrNull()?.printStackTrace()
             }
         })
+    }
+
+    /**
+     * 判断是否已经选中过城市
+     * 如果已有保存的城市信息就直接进行跳转
+     */
+    private fun isSelectedPlace() {
+        if (mViewModel.isPlaceSave()) {
+            val data = mViewModel.getSavePlace()
+            val intent = Intent(mContext, WeatherActivity::class.java).apply {
+                putExtra("location_lng", data.location.lng)
+                putExtra("location_lat", data.location.lat)
+                putExtra("place_name", data.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
     }
 }
