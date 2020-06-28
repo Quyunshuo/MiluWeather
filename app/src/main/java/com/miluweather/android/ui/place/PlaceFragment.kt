@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.miluweather.android.R
 import com.miluweather.android.adapter.PlaceAdapter
 import com.miluweather.android.base.BaseFragment
-import com.miluweather.android.model.Place
+import com.miluweather.android.bean.Place
 import com.miluweather.android.ui.main.MainActivity
 import com.miluweather.android.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.activity_weather.*

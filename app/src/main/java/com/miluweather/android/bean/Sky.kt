@@ -1,4 +1,4 @@
-package com.miluweather.android.model
+package com.miluweather.android.bean
 
 import com.miluweather.android.R
 

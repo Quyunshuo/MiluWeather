@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Gson
+ -keepattributes Signature
+ -keepattributes *Annotation*
+ -dontwarn sun.misc.**
+ -keep class com.miluweather.android.bean.** { *; }
+ -keep class * implements com.google.gson.TypeAdapterFactory
+ -keep class * implements com.google.gson.JsonSerializer
+ -keep class * implements com.google.gson.JsonDeserializer

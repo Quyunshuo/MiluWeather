@@ -3,7 +3,7 @@ package com.miluweather.android.ui.place
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.miluweather.android.model.Place
+import com.miluweather.android.bean.Place
 
 /**
  * @Author: QuYunShuo

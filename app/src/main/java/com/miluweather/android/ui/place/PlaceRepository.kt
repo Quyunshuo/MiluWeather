@@ -2,7 +2,7 @@ package com.miluweather.android.ui.place
 
 import com.miluweather.android.base.BaseRepository
 import com.miluweather.android.dao.PlaceDao
-import com.miluweather.android.model.Place
+import com.miluweather.android.bean.Place
 import com.miluweather.android.net.SendRequest
 import kotlinx.coroutines.Dispatchers
 

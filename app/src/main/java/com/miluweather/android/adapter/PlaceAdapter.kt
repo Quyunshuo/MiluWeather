@@ -3,7 +3,7 @@ package com.miluweather.android.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.miluweather.android.R
-import com.miluweather.android.model.Place
+import com.miluweather.android.bean.Place
 
 /**
  * @Author: QuYunShuo

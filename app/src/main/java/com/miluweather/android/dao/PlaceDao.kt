@@ -2,7 +2,7 @@ package com.miluweather.android.dao
 
 import com.google.gson.Gson
 import com.miluweather.android.constant.SpKey
-import com.miluweather.android.model.Place
+import com.miluweather.android.bean.Place
 import com.miluweather.android.utils.SpUtils
 
 /**

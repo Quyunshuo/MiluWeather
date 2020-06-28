@@ -1,8 +1,8 @@
 package com.miluweather.android.net.api
 
 import com.miluweather.android.constant.AppConstant
-import com.miluweather.android.model.DailyResponse
-import com.miluweather.android.model.RealtimeResponse
+import com.miluweather.android.bean.DailyResponse
+import com.miluweather.android.bean.RealtimeResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

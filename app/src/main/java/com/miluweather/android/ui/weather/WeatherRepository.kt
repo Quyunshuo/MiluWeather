@@ -1,7 +1,7 @@
 package com.miluweather.android.ui.weather
 
 import com.miluweather.android.base.BaseRepository
-import com.miluweather.android.model.Weather
+import com.miluweather.android.bean.Weather
 import com.miluweather.android.net.SendRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

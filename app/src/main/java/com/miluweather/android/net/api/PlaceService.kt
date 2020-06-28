@@ -1,7 +1,7 @@
 package com.miluweather.android.net.api
 
 import com.miluweather.android.constant.AppConstant
-import com.miluweather.android.model.PlaceResponse
+import com.miluweather.android.bean.PlaceResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

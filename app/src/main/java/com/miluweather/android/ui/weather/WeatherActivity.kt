@@ -15,9 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
-import com.miluweather.android.model.Place
-import com.miluweather.android.model.Weather
-import com.miluweather.android.model.getSky
+import com.miluweather.android.bean.Place
+import com.miluweather.android.bean.Weather
+import com.miluweather.android.bean.getSky
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
 import kotlinx.android.synthetic.main.life_index.*

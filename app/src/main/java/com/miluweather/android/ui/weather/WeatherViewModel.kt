@@ -3,7 +3,7 @@ package com.miluweather.android.ui.weather
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.miluweather.android.model.Location
+import com.miluweather.android.bean.Location
 
 /**
  * @Author: QuYunShuo
