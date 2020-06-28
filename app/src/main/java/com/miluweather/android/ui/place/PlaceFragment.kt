@@ -53,6 +53,7 @@ class PlaceFragment : BaseFragment() {
                     putExtra("place_name", data.name)
                 }
                 startActivity(intent)
+                activity?.finish()
             }
         }
         recyclerView.layoutManager = LinearLayoutManager(mContext)
