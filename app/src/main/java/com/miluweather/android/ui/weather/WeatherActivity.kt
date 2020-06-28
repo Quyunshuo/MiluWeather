@@ -35,9 +35,31 @@ class WeatherActivity : BaseActivity() {
     override fun initView() {
         if (Build.VERSION.SDK_INT >= 21) {
             val decorView = window.decorView
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             window.statusBarColor = Color.TRANSPARENT
         }
+        initData()
+        swipeRefresh.setColorSchemeResources(R.color.theme_color)
+        swipeRefresh.setOnRefreshListener { refreshWeather() }
+        swipeRefresh.setProgressViewEndTarget(true, 280)
+        mViewModel.weatherLiveData.observe(this, Observer {
+            val weather = it.getOrNull()
+            if (weather != null) {
+                showWeatherInfo(weather)
+            } else {
+                Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
+                it.exceptionOrNull()?.printStackTrace()
+            }
+            swipeRefresh.isRefreshing = false
+        })
+        refreshWeather()
+    }
+
+    /**
+     * 初始化接收的数据
+     */
+    private fun initData() {
         if (mViewModel.locationLng.isEmpty()) {
             mViewModel.locationLng = intent.getStringExtra("location_lng") ?: ""
         }
@@ -47,16 +69,14 @@ class WeatherActivity : BaseActivity() {
         if (mViewModel.placeName.isEmpty()) {
             mViewModel.placeName = intent.getStringExtra("place_name") ?: ""
         }
-        mViewModel.weatherLiveData.observe(this, Observer {
-            val weather = it.getOrNull()
-            if (weather != null) {
-                showWeatherInfo(weather)
-            } else {
-                Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
-                it.exceptionOrNull()?.printStackTrace()
-            }
-        })
+    }
+
+    /**
+     * 刷新天气
+     */
+    private fun refreshWeather() {
         mViewModel.refreshWeather(mViewModel.locationLng, mViewModel.locationLat)
+        swipeRefresh.isRefreshing = true
     }
 
     /**
