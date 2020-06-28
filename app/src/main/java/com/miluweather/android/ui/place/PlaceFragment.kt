@@ -13,6 +13,7 @@ import com.miluweather.android.base.BaseFragment
 import com.miluweather.android.model.Place
 import com.miluweather.android.ui.main.MainActivity
 import com.miluweather.android.ui.weather.WeatherActivity
+import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.fragment_place.*
 
 /**
@@ -30,19 +31,29 @@ class PlaceFragment : BaseFragment() {
     override fun getLayoutId(): Int = R.layout.fragment_place
 
     override fun initView() {
-        (activity as MainActivity).setStatusBarColor(resources.getColor(R.color.theme_color))
+        if (activity is MainActivity) {
+            (activity as MainActivity).setStatusBarColor(resources.getColor(R.color.theme_color))
+        }
         isSelectedPlace()
         mAdapter = PlaceAdapter(mViewModel.placeList)
         mAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.getItem(position) as Place
             // 对当前城市信息做保存
             mViewModel.savePlace(data)
-            val intent = Intent(mContext, WeatherActivity::class.java).apply {
-                putExtra("location_lng", data.location.lng)
-                putExtra("location_lat", data.location.lat)
-                putExtra("place_name", data.name)
+            // 页面寄存于WeatherActivity的逻辑
+            if (activity is WeatherActivity) {
+                (activity as WeatherActivity).apply {
+                    drawerLayout.closeDrawers()
+                    changePlace(data)
+                }
+            } else {
+                val intent = Intent(mContext, WeatherActivity::class.java).apply {
+                    putExtra("location_lng", data.location.lng)
+                    putExtra("location_lat", data.location.lat)
+                    putExtra("place_name", data.name)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         }
         recyclerView.layoutManager = LinearLayoutManager(mContext)
         recyclerView.adapter = mAdapter
@@ -82,7 +93,7 @@ class PlaceFragment : BaseFragment() {
      * 如果已有保存的城市信息就直接进行跳转
      */
     private fun isSelectedPlace() {
-        if (mViewModel.isPlaceSave()) {
+        if (activity is MainActivity && mViewModel.isPlaceSave()) {
             val data = mViewModel.getSavePlace()
             val intent = Intent(mContext, WeatherActivity::class.java).apply {
                 putExtra("location_lng", data.location.lng)

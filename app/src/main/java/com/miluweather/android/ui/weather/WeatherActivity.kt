@@ -1,16 +1,21 @@
 package com.miluweather.android.ui.weather
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
+import com.miluweather.android.model.Place
 import com.miluweather.android.model.Weather
 import com.miluweather.android.model.getSky
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -40,9 +45,29 @@ class WeatherActivity : BaseActivity() {
             window.statusBarColor = Color.TRANSPARENT
         }
         initData()
-        swipeRefresh.setColorSchemeResources(R.color.theme_color)
-        swipeRefresh.setOnRefreshListener { refreshWeather() }
-        swipeRefresh.setProgressViewEndTarget(true, 280)
+        swipeRefresh.apply {
+            setColorSchemeResources(R.color.theme_color)
+            setOnRefreshListener { refreshWeather() }
+            setProgressViewEndTarget(true, 280)
+        }
+        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerClosed(drawerView: View) {
+                // 滑动菜单关闭时 同时对输入法进行关闭
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    drawerView.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+
+            override fun onDrawerOpened(drawerView: View) {}
+        })
+        navBtn.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         mViewModel.weatherLiveData.observe(this, Observer {
             val weather = it.getOrNull()
             if (weather != null) {
@@ -77,6 +102,18 @@ class WeatherActivity : BaseActivity() {
     private fun refreshWeather() {
         mViewModel.refreshWeather(mViewModel.locationLng, mViewModel.locationLat)
         swipeRefresh.isRefreshing = true
+    }
+
+    /**
+     * 更改城市
+     */
+    fun changePlace(place: Place) {
+        place.let {
+            mViewModel.locationLng = it.location.lng
+            mViewModel.locationLat = it.location.lat
+            mViewModel.placeName = it.name
+        }
+        refreshWeather()
     }
 
     /**
