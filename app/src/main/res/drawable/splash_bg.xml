@@ -12,6 +12,6 @@
     <item android:bottom="200dp">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/icon" />
+            android:src="@drawable/ic_launcher" />
     </item>
 </layer-list>
