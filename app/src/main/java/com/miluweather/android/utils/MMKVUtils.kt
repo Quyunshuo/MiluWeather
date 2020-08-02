@@ -6,15 +6,15 @@ import com.tencent.mmkv.MMKV
 /**
  * @Author: QuYunShuo
  * @Time:   2020/6/26
- * @Class:  SpUtils
+ * @Class:  MMKVUtils
  * @Remark: MMKV使用封装
  */
-object SpUtils {
+object MMKVUtils {
 
     /**
      * 初始化
      */
-    fun init(context: Context) = MMKV.initialize(context)
+    fun init(context: Context): String? = MMKV.initialize(context)
 
     /**
      * 保存数据（简化）

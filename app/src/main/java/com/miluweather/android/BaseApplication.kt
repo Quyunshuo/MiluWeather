@@ -2,7 +2,7 @@ package com.miluweather.android
 
 import android.app.Application
 import android.content.Context
-import com.miluweather.android.utils.SpUtils
+import com.miluweather.android.utils.MMKVUtils
 
 /**
  * @Author: QuYunShuo
@@ -21,6 +21,6 @@ class BaseApplication : Application() {
         super.onCreate()
         context = applicationContext
         // 初始化MMKV 使用MMKV替代SP
-        SpUtils.init(context)
+        MMKVUtils.init(context)
     }
 }
