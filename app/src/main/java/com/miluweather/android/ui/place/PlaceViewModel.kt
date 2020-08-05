@@ -1,9 +1,14 @@
 package com.miluweather.android.ui.place
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
 import com.miluweather.android.bean.Place
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 /**
  * @Author: QuYunShuo
@@ -15,22 +20,35 @@ class PlaceViewModel : ViewModel() {
 
     private val mRepository by lazy { PlaceRepository() }
 
-    // 可观察的搜索值
-    private val searchLivaData = MutableLiveData<String>()
-
     val placeList = ArrayList<Place>()
 
-    // 当搜索值发生变化也就是调用searchPlaces()方法时
-    // 会触发Transformations.switchMap()的逻辑进行网络请求 返回一个可观察的对象
-    val placeLivaData =
-        Transformations.switchMap(searchLivaData) { mRepository.searchPlaces(it) }
+    // 私有
+    private val _placeListLiveData = MutableLiveData<List<Place>>()
+
+    // 对外暴露
+    val placeListLiveData: LiveData<List<Place>> = _placeListLiveData
 
     /**
      * 搜索
      * @param query 搜索值
      */
+    @ExperimentalCoroutinesApi
     fun searchPlaces(query: String) {
-        searchLivaData.value = query
+        viewModelScope.launch {
+            mRepository.searchPlaces(query)
+                .onStart {
+                    Log.d("qqq", "onStart: 发起搜索请求")
+                }
+                .catch {
+                    Log.d("qqq", "catch: 发生异常 Msg:${it}")
+                }
+                .onCompletion {
+                    Log.d("qqq", "onCompletion: 请求完成")
+                }
+                .collectLatest {
+                    _placeListLiveData.postValue(it.places)
+                }
+        }
     }
 
     /**

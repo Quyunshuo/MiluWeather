@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miluweather.android.R
 import com.miluweather.android.adapter.PlaceAdapter
@@ -15,6 +15,7 @@ import com.miluweather.android.ui.main.MainActivity
 import com.miluweather.android.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.fragment_place.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * @Author: QuYunShuo
@@ -24,12 +25,13 @@ import kotlinx.android.synthetic.main.fragment_place.*
  */
 class PlaceFragment : BaseFragment() {
 
-    private val mViewModel by lazy { ViewModelProviders.of(this).get(PlaceViewModel::class.java) }
+    private val mViewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java) }
 
     private lateinit var mAdapter: PlaceAdapter
 
     override fun getLayoutId(): Int = R.layout.fragment_place
 
+    @ExperimentalCoroutinesApi
     override fun initView() {
         if (activity is MainActivity) {
             (activity as MainActivity).setStatusBarColor(resources.getColor(R.color.theme_color))
@@ -67,24 +69,21 @@ class PlaceFragment : BaseFragment() {
             } else {
                 recyclerView.visibility = View.GONE
                 bgImageView.visibility = View.VISIBLE
-                mViewModel.placeList.clear()
                 mAdapter.notifyDataSetChanged()
             }
         }
 
         // 观察请求结果
-        mViewModel.placeLivaData.observe(this, Observer {
-            val places = it.getOrNull()
-            if (places != null) {
+        mViewModel.placeListLiveData.observe(this, Observer {
+            if (it != null && it.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
                 bgImageView.visibility = View.GONE
                 // 将城市列表清空并设置新的请求结果
                 mViewModel.placeList.clear()
-                mViewModel.placeList.addAll(places)
+                mViewModel.placeList.addAll(it)
                 mAdapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(mContext, "未能查询到任何地点", Toast.LENGTH_SHORT).show()
-                it.exceptionOrNull()?.printStackTrace()
             }
         })
     }

@@ -21,7 +21,7 @@ open class BaseRepository {
      * 这个秒数可以自定义
      */
     protected fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
-        liveData<Result<T>>(timeoutInMs = 0L) {
+        liveData(timeoutInMs = 0L) {
             val result = try {
                 block()
             } catch (e: Exception) {
