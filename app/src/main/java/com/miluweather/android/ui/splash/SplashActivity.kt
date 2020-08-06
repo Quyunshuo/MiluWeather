@@ -1,6 +1,7 @@
 package com.miluweather.android.ui.splash
 
 import android.content.Intent
+import androidx.lifecycle.lifecycleScope
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
 import com.miluweather.android.ui.main.MainActivity
@@ -17,7 +18,7 @@ class SplashActivity : BaseActivity() {
     override fun getLayoutId(): Int = R.layout.activity_splash
 
     override fun initView() {
-        mMainScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Default) {
             delay(800)
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             delay(100)

@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.miluweather.android.R
 import com.miluweather.android.base.BaseActivity
 import com.miluweather.android.bean.Place
@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,10 +34,11 @@ import java.util.*
  */
 class WeatherActivity : BaseActivity() {
 
-    private val mViewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
+    private val mViewModel by lazy { ViewModelProvider(this).get(WeatherViewModel::class.java) }
 
     override fun getLayoutId(): Int = R.layout.activity_weather
 
+    @ExperimentalCoroutinesApi
     override fun initView() {
         if (Build.VERSION.SDK_INT >= 21) {
             val decorView = window.decorView
@@ -69,12 +71,10 @@ class WeatherActivity : BaseActivity() {
         })
         navBtn.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         mViewModel.weatherLiveData.observe(this, Observer {
-            val weather = it.getOrNull()
-            if (weather != null) {
-                showWeatherInfo(weather)
+            if (it != null) {
+                showWeatherInfo(it)
             } else {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
-                it.exceptionOrNull()?.printStackTrace()
             }
             swipeRefresh.isRefreshing = false
         })
@@ -99,6 +99,7 @@ class WeatherActivity : BaseActivity() {
     /**
      * 刷新天气
      */
+    @ExperimentalCoroutinesApi
     private fun refreshWeather() {
         mViewModel.refreshWeather(mViewModel.locationLng, mViewModel.locationLat)
         swipeRefresh.isRefreshing = true
@@ -107,6 +108,7 @@ class WeatherActivity : BaseActivity() {
     /**
      * 更改城市
      */
+    @ExperimentalCoroutinesApi
     fun changePlace(place: Place) {
         place.let {
             mViewModel.locationLng = it.location.lng

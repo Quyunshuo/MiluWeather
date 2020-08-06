@@ -1,9 +1,14 @@
 package com.miluweather.android.ui.weather
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import com.miluweather.android.bean.Location
+import android.util.Log
+import androidx.lifecycle.*
+import com.miluweather.android.bean.Weather
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 /**
  * @Author: QuYunShuo
@@ -15,7 +20,11 @@ class WeatherViewModel : ViewModel() {
 
     private val mRepository by lazy { WeatherRepository() }
 
-    private val locationLiveData = MutableLiveData<Location>()
+    // 私有
+    private val _weatherLiveData = MutableLiveData<Weather?>()
+
+    // 对外暴露
+    val weatherLiveData: LiveData<Weather?> = _weatherLiveData
 
     var locationLng = ""
 
@@ -23,11 +32,23 @@ class WeatherViewModel : ViewModel() {
 
     var placeName = ""
 
-    val weatherLiveData = Transformations.switchMap(locationLiveData) {
-        mRepository.refreshWeather(it.lng, it.lat)
-    }
-
+    @ExperimentalCoroutinesApi
     fun refreshWeather(lng: String, lat: String) {
-        locationLiveData.value = Location(lng, lat)
+        viewModelScope.launch {
+            mRepository.refreshWeather(lng, lat)
+                .onStart {
+                    Log.d("qqq", "onStart: 发起搜索请求")
+                }
+                .catch {
+                    Log.d("qqq", "catch: 发生异常 Msg:${it}")
+                    _weatherLiveData.postValue(null)
+                }
+                .onCompletion {
+                    Log.d("qqq", "onCompletion: 请求完成")
+                }
+                .collectLatest {
+                    _weatherLiveData.postValue(it)
+                }
+        }
     }
 }
