@@ -17,23 +17,30 @@ object ServiceCreator {
 
     private const val BASE_URL = "https://api.caiyunapp.com/"
 
-    private val BODY by lazy { HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY) }
+    private val BODY by lazy(mode = LazyThreadSafetyMode.NONE) {
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
 
-    private val NONE by lazy { HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE) }
+    private val NONE by lazy(mode = LazyThreadSafetyMode.NONE) {
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+    }
 
-    private val netClient = OkHttpClient.Builder()
-        .readTimeout(15, TimeUnit.SECONDS)
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .addInterceptor(if (BuildConfig.DEBUG) BODY else NONE)
-        .retryOnConnectionFailure(true)
-        .build()
+    private val netClient by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        OkHttpClient.Builder()
+            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(if (BuildConfig.DEBUG) BODY else NONE)
+            .retryOnConnectionFailure(true)
+            .build()
+    }
 
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(netClient)
-        .build()
+    private val retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(netClient)
+            .build()
+    }
 
     /**
      * 获取service动态代理对象
